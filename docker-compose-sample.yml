@@ -1,0 +1,50 @@
+version: '2'
+services:
+  # front:
+  #   container_name: test.front
+  #   build: ./.docker/node
+  #   env_file: 
+  #     - ./front/.env
+  #   ports:
+  #     - '3000:3000'
+  #   volumes:
+  #     - ./front:/app
+  #   dns: 
+  #     - '8.8.8.8'
+  #     - '8.8.4.4'
+  #   networks:
+  #     - test-net
+
+  # back:
+  #   container_name: test.back
+  #   build: ./.docker/php
+  #   restart: always
+  #   ports:
+  #     - '8031:80'
+  #   volumes:
+  #     - ./back:/app
+  #   dns: 
+  #     - '8.8.8.8'
+  #     - '8.8.4.4'
+  #   networks:
+  #     - test-net
+
+  test-db:
+    container_name: test.db
+    image: mariadb
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: Test@3661
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: Test@3661
+    volumes:
+      - ./.db:/var/lib/mysql
+    networks:
+      - test-net
+      
+networks:
+  test-net:
+    external: true
