@@ -20,7 +20,7 @@ services:
     build: ./.docker/golang
     restart: always
     ports:
-      - '8031:80'
+      - '8031:8000'
     volumes:
       - ./back:/app
     dns: 
