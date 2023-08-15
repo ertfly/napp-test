@@ -1,12 +1,11 @@
 FROM golang
 
-ADD . /go/src/wscraper
+ADD . /go/src/napptest
 
-RUN go get golang.org/x/net/html
-RUN go get github.com/go-redis/redis
+RUN go get
     
-RUN go install wscraper
+RUN go install napptest
 
-ENTRYPOINT /go/bin/wscraper
+ENTRYPOINT /go/bin/napptest
 
-EXPOSE 8080
+EXPOSE 80

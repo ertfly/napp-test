@@ -15,19 +15,19 @@ services:
   #   networks:
   #     - test-net
 
-  # back:
-  #   container_name: test.back
-  #   build: ./.docker/php
-  #   restart: always
-  #   ports:
-  #     - '8031:80'
-  #   volumes:
-  #     - ./back:/app
-  #   dns: 
-  #     - '8.8.8.8'
-  #     - '8.8.4.4'
-  #   networks:
-  #     - test-net
+  back:
+    container_name: test.back
+    build: ./.docker/golang
+    restart: always
+    ports:
+      - '8031:80'
+    volumes:
+      - ./back:/app
+    dns: 
+      - '8.8.8.8'
+      - '8.8.4.4'
+    networks:
+      - test-net
 
   test-db:
     container_name: test.db

@@ -1,4 +1,4 @@
-module napp.ericteixeira.com
+module napptest
 
 go 1.20
 
