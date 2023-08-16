@@ -1,6 +1,11 @@
 package helpers
 
-func ResponseOk(a interface{}) ResponseApi {
+import (
+	"encoding/json"
+	"net/http"
+)
+
+func ResponseOk(w http.ResponseWriter, a interface{}) {
 	res := ResponseApi{
 		Response: ResponseCode{
 			Code: 0,
@@ -9,7 +14,7 @@ func ResponseOk(a interface{}) ResponseApi {
 		Data: a,
 	}
 
-	return res
+	json.NewEncoder(w).Encode(res)
 }
 
 type ResponseApi struct {

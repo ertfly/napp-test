@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"napptest/helpers"
 	"net/http"
 )
@@ -11,7 +10,7 @@ func ProductsIndex(w http.ResponseWriter, r *http.Request) {
 		"teste": "teste da silva",
 	}
 
-	json.NewEncoder(w).Encode(helpers.ResponseOk(res))
+	helpers.ResponseOk(w, res)
 }
 
 func ProductsPost(w http.ResponseWriter, r *http.Request) {
