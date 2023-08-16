@@ -14,11 +14,24 @@ import (
 )
 
 func ProductsIndex(w http.ResponseWriter, r *http.Request) {
-	// res := map[string]interface{}{
-	// 	"teste": "teste da silva",
-	// }
+	var rows []interface{}
 
-	helpers.ResponseError(w, 1, "Eric deu merda")
+	for _, row := range business.ProductsAll() {
+		newRow := map[string]interface{}{
+			"id":         *row.Id,
+			"sku":        *row.Sku,
+			"name":       *row.Name,
+			"price_unit": *row.PriceUnit,
+		}
+
+		rows = append(rows, newRow)
+	}
+
+	res := map[string]interface{}{
+		"rows": rows,
+	}
+
+	helpers.ResponseOk(w, res)
 }
 
 func ProductsPost(w http.ResponseWriter, r *http.Request) {

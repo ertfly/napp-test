@@ -63,6 +63,7 @@ func (row *Products) Insert(db *sql.DB) {
 	res, err := db.Exec("INSERT INTO products ( `sku`, `name`, `price_unit`, `created_at`, `updated_at`, `trash` ) values (?, ?, ?, ?, ?, ?)", row.Sku, row.Name, row.PriceUnit, row.CreatedAt, row.UpdatedAt, row.Trash)
 	if err != nil {
 		log.Fatalln(err.Error())
+		return
 	}
 
 	lastId, _ := res.LastInsertId()
@@ -75,6 +76,7 @@ func (row Products) Update(db *sql.DB) {
 	_, err := db.Exec("UPDATE products SET sku=?, name=?, price_unit=?, created_at=?, updated_at=?, trash=? WHERE `id` = ?", row.Sku, row.Name, row.PriceUnit, row.CreatedAt, row.UpdatedAt, row.Trash, row.Id)
 	if err != nil {
 		log.Fatalln(err.Error())
+		return
 	}
 
 	defer db.Close()
@@ -82,4 +84,20 @@ func (row Products) Update(db *sql.DB) {
 
 func (row Products) HasNew() bool {
 	return row.Id == nil
+}
+
+func ProductsAll() []Products {
+	db := helpers.DatabaseInstance()
+	res, err := db.Query("select * from products order by name")
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	rows := []Products{}
+	for res.Next() {
+		row := Products{}
+		res.Scan(&row.Id, &row.Sku, &row.Name, &row.PriceUnit, &row.CreatedAt, &row.UpdatedAt, &row.Trash)
+		rows = append(rows, row)
+	}
+
+	return rows
 }

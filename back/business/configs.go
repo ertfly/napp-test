@@ -44,6 +44,7 @@ func (row Configs) Insert(db *sql.DB) {
 	_, err := db.Exec("INSERT INTO configs ( `id`, `value`, `description` ) values (?, ?, ?)", row.Id, row.Value, row.Description)
 	if err != nil {
 		log.Fatalln(err.Error())
+		return
 	}
 
 	defer db.Close()
@@ -53,6 +54,7 @@ func (row Configs) Update(db *sql.DB) {
 	_, err := db.Exec("UPDATE configs SET `value` = ?, `description` = ? WHERE `id` = ?", row.Value, row.Description, row.Id)
 	if err != nil {
 		log.Fatalln(err.Error())
+		return
 	}
 
 	defer db.Close()
