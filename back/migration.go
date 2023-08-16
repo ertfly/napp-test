@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"napptest/business"
 	"napptest/helpers"
@@ -29,7 +28,6 @@ func Migration() {
 	}
 
 	sequence, _ := strconv.Atoi(*migration.Value)
-	fmt.Println(sequence)
 	MigrationFiles((sequence + 1))
 }
 
@@ -70,14 +68,12 @@ func MigrationFiles(sequenceInitial int) {
 	migration.Value = &strSequence
 
 	if migration.HasNew() {
-		fmt.Println("vai inserir")
 		id := "MIGRATION"
 		description := "Number sequence migration"
 		migration.Id = &id
 		migration.Description = &description
 		migration.Insert(helpers.DatabaseInstance())
 	} else {
-		fmt.Println("vai editar")
 		migration.Update(helpers.DatabaseInstance())
 	}
 
