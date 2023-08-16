@@ -14,6 +14,7 @@ func ResponseOk(w http.ResponseWriter, a interface{}) {
 		Data: a,
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(res)
 }
 
@@ -25,6 +26,7 @@ func ResponseError(w http.ResponseWriter, code int64, msg string) {
 		},
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusInternalServerError)
 	json.NewEncoder(w).Encode(res)
 }

@@ -18,7 +18,7 @@ func ConfigsNew() Configs {
 func ConfigsById(id string) (Configs, error) {
 	db := helpers.DatabaseInstance()
 	row := Configs{}
-	res, err := db.Query("SELECT * FROM " + TABLE + " limit 1")
+	res, err := db.Query("SELECT * FROM "+TABLE+" WHERE `id` = ? limit 1", id)
 	if err != nil {
 		return row, err
 	}
