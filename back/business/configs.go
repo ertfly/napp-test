@@ -42,6 +42,8 @@ func (row Configs) Insert(db *sql.DB) {
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
+
+	defer db.Close()
 }
 
 func (row Configs) Update(db *sql.DB) {
@@ -49,6 +51,8 @@ func (row Configs) Update(db *sql.DB) {
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
+
+	defer db.Close()
 }
 
 func (row Configs) HasNew() bool {

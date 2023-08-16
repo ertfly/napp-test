@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"napptest/business"
 	"napptest/helpers"
 	"os"
 	"regexp"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -25,23 +25,27 @@ func Migration() {
 	}
 
 	if migration.HasNew() {
-		fmt.Println("insert")
-	} else {
-		fmt.Println("update")
+		*migration.Id = "MIGRATION"
+		*migration.Value = "0"
+		*migration.Description = "Number sequence migration"
+		migration.Insert(helpers.DatabaseInstance())
 	}
 
-	fmt.Println(migration.Description)
+	sequence, _ := strconv.Atoi(*migration.Value)
+	MigrationFiles(sequence)
 }
 
-func MigrationFiles() {
-	entries, err := os.ReadDir("./migrations")
-	if err != nil {
-		log.Fatal(err)
-	}
-
+func MigrationFiles(sequence int) {
 	db := helpers.DatabaseInstance()
-	for _, e := range entries {
-		sql, err := os.ReadFile("./migrations/" + e.Name())
+	check := true
+	for check {
+		_, err := os.Stat("./migrations/" + string(sequence) + ".sql")
+		if err != nil {
+			check = false
+			return
+		}
+
+		sql, err := os.ReadFile("./migrations/" + string(sequence) + ".sql")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -52,16 +56,9 @@ func MigrationFiles() {
 
 		defer res.Close()
 	}
-
-	defer db.Close()
 }
 
 func HelpersMigrationCheck(str string) bool {
 	r, _ := regexp.Compile(`Table \'test\.configs\' doesn\'t exist`)
-	if r.MatchString(str) {
-		MigrationFiles()
-		return true
-	}
-
-	return false
+	return r.MatchString(str)
 }
