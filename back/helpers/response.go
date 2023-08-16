@@ -17,6 +17,18 @@ func ResponseOk(w http.ResponseWriter, a interface{}) {
 	json.NewEncoder(w).Encode(res)
 }
 
+func ResponseError(w http.ResponseWriter, code int64, msg string) {
+	res := ResponseApi{
+		Response: ResponseCode{
+			Code: code,
+			Msg:  msg,
+		},
+	}
+
+	w.WriteHeader(http.StatusInternalServerError)
+	json.NewEncoder(w).Encode(res)
+}
+
 type ResponseApi struct {
 	Response ResponseCode `json:"response"`
 	Data     interface{}  `json:"data"`
