@@ -1,4 +1,4 @@
-CREATE TABLE test.configs (
+CREATE TABLE IF NOT EXISTS test.configs (
 	id varchar(30) NOT NULL,
 	`value` LONG VARCHAR NULL,
 	`description` varchar(100) NOT NULL,

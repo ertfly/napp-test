@@ -1,4 +1,4 @@
-CREATE TABLE test.products (
+CREATE TABLE IF NOT EXISTS test.products (
 	id bigint auto_increment NOT NULL,
 	sku varchar(50) NOT NULL,
 	`name` varchar(250) NOT NULL,

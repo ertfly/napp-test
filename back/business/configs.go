@@ -1,12 +1,23 @@
 package business
 
-import "napptest/helpers"
+import (
+	"database/sql"
+	"log"
+	"napptest/helpers"
+
+	_ "github.com/go-sql-driver/mysql"
+)
 
 const TABLE = "configs"
 
-func ConfigsById(id string) (ConfigsEntity, error) {
+func ConfigsNew() Configs {
+	row := Configs{}
+	return row
+}
+
+func ConfigsById(id string) (Configs, error) {
 	db := helpers.DatabaseInstance()
-	row := ConfigsEntity{}
+	row := Configs{}
 	res, err := db.Query("SELECT * FROM " + TABLE + " limit 1")
 	if err != nil {
 		return row, err
@@ -20,8 +31,26 @@ func ConfigsById(id string) (ConfigsEntity, error) {
 	return row, nil
 }
 
-type ConfigsEntity struct {
-	Id          int
-	Value       string
-	Description string
+type Configs struct {
+	Id          *string
+	Value       *string
+	Description *string
+}
+
+func (row Configs) Insert(db *sql.DB) {
+	_, err := db.Exec("INSERT INTO "+TABLE+" ( `id`, `value`, `description` ) values (?, ?, ?)", row.Id, row.Value, row.Description)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+}
+
+func (row Configs) Update(db *sql.DB) {
+	_, err := db.Exec("UPDATE "+TABLE+" SET `value` = ?, `description` = ? WHERE `id` = ?", row.Value, row.Description, row.Id)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+}
+
+func (row Configs) HasNew() bool {
+	return row.Id == nil
 }
