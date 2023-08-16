@@ -2,16 +2,21 @@ package controllers
 
 import (
 	"encoding/json"
+	"napptest/helpers"
 	"net/http"
 )
 
 func ProductsIndex(w http.ResponseWriter, r *http.Request) {
-	var res ProductsIndexResponse
-	res.Msg = "Deu certo 2222"
-	json.NewEncoder(w).Encode(res)
+	res := map[string]interface{}{
+		"teste": "teste da silva",
+	}
+
+	json.NewEncoder(w).Encode(helpers.ResponseOk(res))
 }
 
-type ProductsIndexResponse struct {
-	Success bool   `json:"success"`
-	Msg     string `json:"msg"`
+func ProductsPost(w http.ResponseWriter, r *http.Request) {
+
+	// var res ProductsIndexResponse
+	// res.Msg = "Deu certo 2222"
+	// json.NewEncoder(w).Encode(res)
 }
