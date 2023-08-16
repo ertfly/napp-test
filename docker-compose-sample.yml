@@ -1,19 +1,19 @@
 version: '2'
 services:
-  # front:
-  #   container_name: test.front
-  #   build: ./.docker/node
-  #   env_file: 
-  #     - ./front/.env
-  #   ports:
-  #     - '3000:3000'
-  #   volumes:
-  #     - ./front:/app
-  #   dns: 
-  #     - '8.8.8.8'
-  #     - '8.8.4.4'
-  #   networks:
-  #     - test-net
+  front:
+    container_name: test.front
+    build: ./.docker/node
+    env_file: 
+      - ./front/.env
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./front:/app
+    dns: 
+      - '8.8.8.8'
+      - '8.8.4.4'
+    networks:
+      - test-net
 
   back:
     container_name: test.back
