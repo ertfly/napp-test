@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"napptest/business"
 	"napptest/helpers"
@@ -17,6 +18,9 @@ func Migration() {
 		if !HelpersMigrationCheck(err.Error()) {
 			panic(err.Error())
 		}
+
+		MigrationFiles(1)
+		return
 	}
 
 	migration, err = business.ConfigsById("MIGRATION")
@@ -24,28 +28,23 @@ func Migration() {
 		panic(err.Error())
 	}
 
-	if migration.HasNew() {
-		*migration.Id = "MIGRATION"
-		*migration.Value = "0"
-		*migration.Description = "Number sequence migration"
-		migration.Insert(helpers.DatabaseInstance())
-	}
-
 	sequence, _ := strconv.Atoi(*migration.Value)
-	MigrationFiles(sequence)
+	fmt.Println(sequence)
+	MigrationFiles((sequence + 1))
 }
 
-func MigrationFiles(sequence int) {
+func MigrationFiles(sequenceInitial int) {
+	sequence := sequenceInitial
 	db := helpers.DatabaseInstance()
 	check := true
 	for check {
-		_, err := os.Stat("./migrations/" + string(sequence) + ".sql")
+		_, err := os.Stat("./migrations/" + strconv.FormatInt(int64(sequence), 10) + ".sql")
 		if err != nil {
 			check = false
-			return
+			break
 		}
 
-		sql, err := os.ReadFile("./migrations/" + string(sequence) + ".sql")
+		sql, err := os.ReadFile("./migrations/" + strconv.FormatInt(int64(sequence), 10) + ".sql")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -55,7 +54,33 @@ func MigrationFiles(sequence int) {
 		}
 
 		defer res.Close()
+
+		sequence++
 	}
+	defer db.Close()
+
+	sequence--
+
+	migration, err := business.ConfigsById("MIGRATION")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	strSequence := strconv.FormatInt(int64(sequence), 10)
+	migration.Value = &strSequence
+
+	if migration.HasNew() {
+		fmt.Println("vai inserir")
+		id := "MIGRATION"
+		description := "Number sequence migration"
+		migration.Id = &id
+		migration.Description = &description
+		migration.Insert(helpers.DatabaseInstance())
+	} else {
+		fmt.Println("vai editar")
+		migration.Update(helpers.DatabaseInstance())
+	}
+
 }
 
 func HelpersMigrationCheck(str string) bool {
