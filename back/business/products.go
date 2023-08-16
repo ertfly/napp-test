@@ -58,9 +58,7 @@ type Products struct {
 }
 
 func (row *Products) Insert(db *sql.DB) {
-	trash := false
-	row.Trash = &trash
-	res, err := db.Exec("INSERT INTO products ( `sku`, `name`, `price_unit`, `created_at`, `updated_at`, `trash` ) values (?, ?, ?, ?, ?, ?)", row.Sku, row.Name, row.PriceUnit, row.CreatedAt, row.UpdatedAt, row.Trash)
+	res, err := db.Exec("INSERT INTO products ( `sku`, `name`, `price_unit`, `created_at`, `updated_at`, `trash` ) values (?, ?, ?, ?, ?, ?)", row.Sku, row.Name, row.PriceUnit, row.CreatedAt, row.UpdatedAt, true)
 	if err != nil {
 		log.Fatalln(err.Error())
 		return
@@ -74,6 +72,16 @@ func (row *Products) Insert(db *sql.DB) {
 
 func (row Products) Update(db *sql.DB) {
 	_, err := db.Exec("UPDATE products SET sku=?, name=?, price_unit=?, created_at=?, updated_at=?, trash=? WHERE `id` = ?", row.Sku, row.Name, row.PriceUnit, row.CreatedAt, row.UpdatedAt, row.Trash, row.Id)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return
+	}
+
+	defer db.Close()
+}
+
+func (row Products) Delete(db *sql.DB) {
+	_, err := db.Exec("UPDATE products SET trash=? WHERE `id` = ?", true, row.Id)
 	if err != nil {
 		log.Fatalln(err.Error())
 		return

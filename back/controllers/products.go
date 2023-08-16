@@ -93,6 +93,27 @@ func ProductsPut(w http.ResponseWriter, r *http.Request) {
 	helpers.ResponseOk(w, res)
 }
 
+func ProductsDelete(w http.ResponseWriter, r *http.Request) {
+	record, err := business.ProductsById(mux.Vars(r)["id"])
+	if err != nil {
+		log.Fatalln(err.Error())
+		helpers.ResponseError(w, 2, "internal server error")
+		return
+	}
+
+	if record.Id == nil || *record.Trash {
+		helpers.ResponseError(w, 1, "product not found")
+		return
+	}
+
+	record.Delete(helpers.DatabaseInstance())
+
+	res := map[string]interface{}{
+		"id": *record.Id,
+	}
+	helpers.ResponseOk(w, res)
+}
+
 func ProductsValidate(w http.ResponseWriter, row ProductRequest) bool {
 	if row.Sku == nil || strings.Trim(*row.Sku, " ") == "" {
 		helpers.ResponseError(w, 1, "sku is required")
