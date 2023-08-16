@@ -8,34 +8,19 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-const TABLE = "configs"
-
 func ConfigsNew() Configs {
 	row := Configs{}
 	return row
 }
 
+func ConfigsTable() string {
+	return "configs"
+}
+
 func ConfigsById(id string) (Configs, error) {
 	db := helpers.DatabaseInstance()
 	row := Configs{}
-	res, err := db.Query("SELECT * FROM "+TABLE+" WHERE `id` = ? limit 1", id)
-	if err != nil {
-		return row, err
-	}
-	defer db.Close()
-
-	for res.Next() {
-		res.Scan(&row.Id, &row.Value, &row.Description)
-		return row, nil
-	}
-
-	return row, nil
-}
-
-func ConfigsBySky(sku string) (Configs, error) {
-	db := helpers.DatabaseInstance()
-	row := Configs{}
-	res, err := db.Query("SELECT * FROM "+TABLE+" WHERE `sku` = ? limit 1", sku)
+	res, err := db.Query("SELECT * FROM configs WHERE `id` = ? limit 1", id)
 	if err != nil {
 		return row, err
 	}
@@ -56,7 +41,7 @@ type Configs struct {
 }
 
 func (row Configs) Insert(db *sql.DB) {
-	_, err := db.Exec("INSERT INTO "+TABLE+" ( `id`, `value`, `description` ) values (?, ?, ?)", row.Id, row.Value, row.Description)
+	_, err := db.Exec("INSERT INTO configs ( `id`, `value`, `description` ) values (?, ?, ?)", row.Id, row.Value, row.Description)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
@@ -65,7 +50,7 @@ func (row Configs) Insert(db *sql.DB) {
 }
 
 func (row Configs) Update(db *sql.DB) {
-	_, err := db.Exec("UPDATE "+TABLE+" SET `value` = ?, `description` = ? WHERE `id` = ?", row.Value, row.Description, row.Id)
+	_, err := db.Exec("UPDATE configs SET `value` = ?, `description` = ? WHERE `id` = ?", row.Value, row.Description, row.Id)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
