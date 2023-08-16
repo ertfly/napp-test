@@ -22,6 +22,24 @@ func ConfigsById(id string) (Configs, error) {
 	if err != nil {
 		return row, err
 	}
+	defer db.Close()
+
+	for res.Next() {
+		res.Scan(&row.Id, &row.Value, &row.Description)
+		return row, nil
+	}
+
+	return row, nil
+}
+
+func ConfigsBySky(sku string) (Configs, error) {
+	db := helpers.DatabaseInstance()
+	row := Configs{}
+	res, err := db.Query("SELECT * FROM "+TABLE+" WHERE `sku` = ? limit 1", sku)
+	if err != nil {
+		return row, err
+	}
+	defer db.Close()
 
 	for res.Next() {
 		res.Scan(&row.Id, &row.Value, &row.Description)

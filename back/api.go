@@ -16,5 +16,6 @@ func main() {
 
 	router := mux.NewRouter()
 	router.HandleFunc("/products", controllers.ProductsIndex).Methods("GET")
+	router.HandleFunc("/products", controllers.ProductsPost).Methods("POST")
 	log.Fatal(http.ListenAndServe("localhost:"+apiPort, router))
 }
