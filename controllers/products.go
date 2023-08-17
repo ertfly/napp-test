@@ -25,11 +25,12 @@ func ProductsIndex(w http.ResponseWriter, r *http.Request) {
 			"last_update":     *lastStock.CreatedAt,
 		}
 		newRow := map[string]interface{}{
-			"id":         *row.Id,
-			"sku":        *row.Sku,
-			"name":       *row.Name,
-			"price_unit": *row.PriceUnit,
-			"stock":      stock,
+			"id":          *row.Id,
+			"sku":         *row.Sku,
+			"name":        *row.Name,
+			"price_unit":  *row.PriceUnit,
+			"price_final": *row.PriceFinal,
+			"stock":       stock,
 		}
 
 		rows = append(rows, newRow)
@@ -63,11 +64,12 @@ func ProductsView(w http.ResponseWriter, r *http.Request) {
 		"last_update":     *lastStock.CreatedAt,
 	}
 	row := map[string]interface{}{
-		"id":         *record.Id,
-		"sku":        *record.Sku,
-		"name":       *record.Name,
-		"price_unit": *record.PriceUnit,
-		"stock":      stock,
+		"id":          *record.Id,
+		"sku":         *record.Sku,
+		"name":        *record.Name,
+		"price_unit":  *record.PriceUnit,
+		"price_final": *record.PriceFinal,
+		"stock":       stock,
 	}
 
 	helpers.ResponseOk(w, row)
@@ -84,10 +86,11 @@ func ProductsPost(w http.ResponseWriter, r *http.Request) {
 	createdAt := time.Now().UTC().Format("2006-01-02 15:04:05")
 
 	record := business.Products{
-		Sku:       row.Sku,
-		Name:      row.Name,
-		PriceUnit: row.PriceUnit,
-		CreatedAt: &createdAt,
+		Sku:        row.Sku,
+		Name:       row.Name,
+		PriceUnit:  row.PriceUnit,
+		PriceFinal: row.PriceFinal,
+		CreatedAt:  &createdAt,
 	}
 
 	record.Insert(helpers.DatabaseInstance())
@@ -139,6 +142,7 @@ func ProductsPut(w http.ResponseWriter, r *http.Request) {
 	record.Sku = row.Sku
 	record.Name = row.Name
 	record.PriceUnit = row.PriceUnit
+	record.PriceFinal = row.PriceFinal
 	record.UpdatedAt = &updatedAt
 
 	createdAt := time.Now().UTC().Format("2006-01-02 15:04:05")
@@ -230,6 +234,7 @@ type ProductRequest struct {
 	Sku        *string  `json:"sku"`
 	Name       *string  `json:"name"`
 	PriceUnit  *float64 `json:"price_unit"`
+	PriceFinal *float64 `json:"price_final"`
 	StockTotal *float64 `json:"stock_total"`
 	StockCut   *float64 `json:"stock_cut"`
 }

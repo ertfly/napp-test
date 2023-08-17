@@ -24,7 +24,7 @@ func ProductsById(id string) (Products, error) {
 	defer db.Close()
 
 	for res.Next() {
-		res.Scan(&row.Id, &row.Sku, &row.Name, &row.PriceUnit, &row.LastStockId, &row.CreatedAt, &row.UpdatedAt, &row.Trash)
+		res.Scan(&row.Id, &row.Sku, &row.Name, &row.PriceUnit, &row.PriceFinal, &row.LastStockId, &row.CreatedAt, &row.UpdatedAt, &row.Trash)
 		return row, nil
 	}
 
@@ -41,7 +41,7 @@ func ProductsBySku(sku string) (Products, error) {
 	defer db.Close()
 
 	for res.Next() {
-		res.Scan(&row.Id, &row.Sku, &row.Name, &row.PriceUnit, &row.LastStockId, &row.CreatedAt, &row.UpdatedAt, &row.Trash)
+		res.Scan(&row.Id, &row.Sku, &row.Name, &row.PriceUnit, *row.PriceFinal, &row.LastStockId, &row.CreatedAt, &row.UpdatedAt, &row.Trash)
 		return row, nil
 	}
 
@@ -53,6 +53,7 @@ type Products struct {
 	Sku         *string
 	Name        *string
 	PriceUnit   *float64
+	PriceFinal  *float64
 	LastStockId *int64
 	CreatedAt   *string
 	UpdatedAt   *string
@@ -64,7 +65,7 @@ type Products struct {
 func (row *Products) Insert(db *sql.DB) {
 	trash := false
 	row.Trash = &trash
-	res, err := db.Exec("INSERT INTO products ( `sku`, `name`, `price_unit`, `last_stock_id`, `created_at`, `updated_at`, `trash` ) values (?, ?, ?, ?, ?, ?, ?)", row.Sku, row.Name, row.PriceUnit, row.LastStockId, row.CreatedAt, row.UpdatedAt, row.Trash)
+	res, err := db.Exec("INSERT INTO products ( `sku`, `name`, `price_unit`, `price_final`, `last_stock_id`, `created_at`, `updated_at`, `trash` ) values (?, ?, ?, ?, ?, ?, ?, ?)", row.Sku, row.Name, row.PriceUnit, row.PriceFinal, row.LastStockId, row.CreatedAt, row.UpdatedAt, row.Trash)
 	if err != nil {
 		log.Fatalln(err.Error())
 		return
@@ -77,7 +78,7 @@ func (row *Products) Insert(db *sql.DB) {
 }
 
 func (row Products) Update(db *sql.DB) {
-	_, err := db.Exec("UPDATE products SET sku=?, name=?, price_unit=?, last_stock_id=?, created_at=?, updated_at=?, trash=? WHERE `id` = ?", row.Sku, row.Name, row.PriceUnit, row.LastStockId, row.CreatedAt, row.UpdatedAt, row.Trash, row.Id)
+	_, err := db.Exec("UPDATE products SET sku=?, name=?, price_unit=?, price_final=?, last_stock_id=?, created_at=?, updated_at=?, trash=? WHERE `id` = ?", row.Sku, row.Name, row.PriceUnit, row.PriceFinal, row.LastStockId, row.CreatedAt, row.UpdatedAt, row.Trash, row.Id)
 	if err != nil {
 		log.Fatalln(err.Error())
 		return
@@ -122,7 +123,7 @@ func ProductsAll() []Products {
 	rows := []Products{}
 	for res.Next() {
 		row := Products{}
-		res.Scan(&row.Id, &row.Sku, &row.Name, &row.PriceUnit, &row.LastStockId, &row.CreatedAt, &row.UpdatedAt, &row.Trash)
+		res.Scan(&row.Id, &row.Sku, &row.Name, &row.PriceUnit, &row.PriceFinal, &row.LastStockId, &row.CreatedAt, &row.UpdatedAt, &row.Trash)
 		rows = append(rows, row)
 	}
 

@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS test.products (
 	sku varchar(50) NOT NULL,
 	`name` varchar(250) NOT NULL,
 	price_unit decimal(18,2) NOT NULL,
+	price_final decimal(18,2) NOT NULL,
 	last_stock_id bigint NULL,
 	created_at datetime NOT NULL,
 	updated_at datetime NULL,
