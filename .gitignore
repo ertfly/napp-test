@@ -1,6 +1,5 @@
 **.DS_Store
-
+/.env
 /docker-compose.yml
 /.db/*.*
 /.db/*
-/back/faceid/images/*
