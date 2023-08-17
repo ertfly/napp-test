@@ -14,10 +14,7 @@ import (
 func Migration() {
 	migration, err := business.ConfigsById("MIGRATION")
 	if err != nil {
-		if !HelpersMigrationCheck(err.Error()) {
-			panic(err.Error())
-		}
-
+		HelpersMigrationCheck(err.Error())
 		MigrationFiles(1)
 		return
 	}
