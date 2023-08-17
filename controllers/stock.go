@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"napptest/business"
 	"napptest/helpers"
 	"net/http"
@@ -11,6 +12,17 @@ import (
 
 func StockIndex(w http.ResponseWriter, r *http.Request) {
 	rows := []interface{}{}
+
+	product, err := business.ProductsById(mux.Vars(r)["productId"])
+	if err != nil {
+		log.Fatalln(err.Error())
+		helpers.ResponseError(w, 2, "internal server error")
+		return
+	}
+	if product.Id == nil || *product.Trash {
+		helpers.ResponseError(w, 1, "product not found")
+		return
+	}
 
 	productId, _ := strconv.ParseInt(mux.Vars(r)["productId"], 10, 0)
 	filter := business.StockFilter{}

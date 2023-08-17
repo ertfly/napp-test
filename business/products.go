@@ -41,7 +41,7 @@ func ProductsBySku(sku string) (Products, error) {
 	defer db.Close()
 
 	for res.Next() {
-		res.Scan(&row.Id, &row.Sku, &row.Name, &row.PriceUnit, *row.PriceFinal, &row.LastStockId, &row.CreatedAt, &row.UpdatedAt, &row.Trash)
+		res.Scan(&row.Id, &row.Sku, &row.Name, &row.PriceUnit, &row.PriceFinal, &row.LastStockId, &row.CreatedAt, &row.UpdatedAt, &row.Trash)
 		return row, nil
 	}
 

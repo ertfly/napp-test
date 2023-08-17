@@ -31,7 +31,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"sku\": \"123\",\n    \"name\": \"Carderno capa dura\",\n    \"price_unit\": 15.4,\n    \"stock_total\": 10,\n    \"stock_cut\": 3\n}",
+					"raw": "{\n    \"sku\": \"124\",\n    \"name\": \"Carderno capa dura\",\n    \"price_unit\": 15.4,\n    \"price_final\": 12.0,\n    \"stock_total\": 10,\n    \"stock_cut\": 3\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -49,7 +49,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"sku\": \"122\",\n    \"name\": \"Carderno capa dura\",\n    \"price_unit\": 15.4,\n    \"stock_total\": 10,\n    \"stock_cut\": 3\n}",
+					"raw": "{\n    \"sku\": \"121\",\n    \"name\": \"Carderno capa dura\",\n    \"price_unit\": 15.4,\n    \"price_final\": 12.0,\n    \"stock_total\": 10,\n    \"stock_cut\": 3\n}",
 					"options": {
 						"raw": {
 							"language": "json"
