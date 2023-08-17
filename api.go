@@ -21,5 +21,5 @@ func main() {
 	router.HandleFunc("/products/{id}", controllers.ProductsPut).Methods("PUT")
 	router.HandleFunc("/products/{id}", controllers.ProductsDelete).Methods("DELETE")
 	router.HandleFunc("/stock/{productId}", controllers.StockIndex).Methods("GET")
-	log.Fatal(http.ListenAndServe("localhost:"+apiPort, router))
+	log.Fatal(http.ListenAndServe("0.0.0.0:"+apiPort, router))
 }

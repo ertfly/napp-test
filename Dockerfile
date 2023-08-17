@@ -1,10 +1,11 @@
 FROM golang
 
-ADD . /app
-
+COPY . /app
 WORKDIR /app
 
-RUN go mod download
+RUN go get
 RUN go install napptest
-ENTRYPOINT /go/bin/napptest
+
+ENTRYPOINT ["/go/bin/napptest"]
+
 EXPOSE 8000

@@ -200,9 +200,11 @@ func ProductsValidate(w http.ResponseWriter, row ProductRequest) bool {
 		helpers.ResponseError(w, 1, "sku already exists")
 		return false
 	}
-	if row.Id != nil && strconv.FormatInt(*check.Id, 10) != strconv.FormatInt(*row.Id, 10) {
-		helpers.ResponseError(w, 1, "sku already exists")
-		return false
+	if check.Id != nil && row.Id != nil {
+		if strconv.FormatInt(*check.Id, 10) != strconv.FormatInt(*row.Id, 10) {
+			helpers.ResponseError(w, 1, "sku already exists")
+			return false
+		}
 	}
 
 	if row.Name == nil || strings.Trim(*row.Name, " ") == "" {
