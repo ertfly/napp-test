@@ -42,6 +42,37 @@ func ProductsIndex(w http.ResponseWriter, r *http.Request) {
 	helpers.ResponseOk(w, res)
 }
 
+func ProductsView(w http.ResponseWriter, r *http.Request) {
+	record, err := business.ProductsById(mux.Vars(r)["id"])
+	if err != nil {
+		log.Fatalln(err.Error())
+		helpers.ResponseError(w, 2, "internal server error")
+		return
+	}
+
+	if record.Id == nil {
+		helpers.ResponseError(w, 1, "product not found")
+		return
+	}
+
+	lastStock := *record.GetLastStock()
+	stock := map[string]interface{}{
+		"stock_total":     *lastStock.StockTotal,
+		"stock_cut":       *lastStock.StockCut,
+		"stock_available": *lastStock.StockAvailable,
+		"last_update":     *lastStock.CreatedAt,
+	}
+	row := map[string]interface{}{
+		"id":         *record.Id,
+		"sku":        *record.Sku,
+		"name":       *record.Name,
+		"price_unit": *record.PriceUnit,
+		"stock":      stock,
+	}
+
+	helpers.ResponseOk(w, row)
+}
+
 func ProductsPost(w http.ResponseWriter, r *http.Request) {
 	var row ProductRequest
 	json.NewDecoder(r.Body).Decode(&row)

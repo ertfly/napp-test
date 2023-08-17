@@ -16,6 +16,7 @@ func main() {
 
 	router := mux.NewRouter()
 	router.HandleFunc("/products", controllers.ProductsIndex).Methods("GET")
+	router.HandleFunc("/products/{id}", controllers.ProductsView).Methods("GET")
 	router.HandleFunc("/products", controllers.ProductsPost).Methods("POST")
 	router.HandleFunc("/products/{id}", controllers.ProductsPut).Methods("PUT")
 	router.HandleFunc("/products/{id}", controllers.ProductsDelete).Methods("DELETE")
