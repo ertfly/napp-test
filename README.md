@@ -64,5 +64,10 @@ docker-compose up -d --build
 ```
 > **_NOTA:_**  O migration ao executar as API's são rodados automaticamentes no run do build
 
+> **_NOTA:_**  Antes de executar as API's aguarde uns segundos para que o banco inicie por completo
+
+## Utilize o collection do POSTMAN na pasta raiz
+- O collection para testar as apis já com as urls definidas de acordo com o que tem default estar o arquivo **postman.json**.
+
 ## O que foi criado
 - API de acordo com o teste solicitado.
