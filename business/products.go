@@ -115,7 +115,7 @@ func (row *Products) GetLastStock() *Stock {
 
 func ProductsAll() []Products {
 	db := helpers.DatabaseInstance()
-	res, err := db.Query("select * from products order by name")
+	res, err := db.Query("select * from products where trash = 0 order by name")
 	if err != nil {
 		log.Fatalln(err.Error())
 	}

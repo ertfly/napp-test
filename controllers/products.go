@@ -124,7 +124,7 @@ func ProductsPut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if record.Id == nil {
+	if record.Id == nil || *record.Trash {
 		helpers.ResponseError(w, 1, "product not found")
 		return
 	}
