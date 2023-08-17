@@ -110,6 +110,19 @@ func ProductsPut(w http.ResponseWriter, r *http.Request) {
 	record.PriceUnit = row.PriceUnit
 	record.UpdatedAt = &updatedAt
 
+	createdAt := time.Now().UTC().Format("2006-01-02 15:04:05")
+	stockAvailable := (*row.StockTotal - *row.StockCut)
+	stock := business.Stock{
+		ProductId:      record.Id,
+		StockTotal:     row.StockTotal,
+		StockCut:       row.StockCut,
+		StockAvailable: &stockAvailable,
+		CreatedAt:      &createdAt,
+	}
+
+	stock.Insert(helpers.DatabaseInstance())
+
+	record.LastStockId = stock.Id
 	record.Update(helpers.DatabaseInstance())
 
 	res := map[string]interface{}{
