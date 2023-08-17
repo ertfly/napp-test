@@ -14,14 +14,22 @@ import (
 )
 
 func ProductsIndex(w http.ResponseWriter, r *http.Request) {
-	var rows []interface{}
+	rows := []interface{}{}
 
 	for _, row := range business.ProductsAll() {
+		lastStock := *row.GetLastStock()
+		stock := map[string]interface{}{
+			"stock_total":     *lastStock.StockTotal,
+			"stock_cut":       *lastStock.StockCut,
+			"stock_available": *lastStock.StockAvailable,
+			"last_update":     *lastStock.CreatedAt,
+		}
 		newRow := map[string]interface{}{
 			"id":         *row.Id,
 			"sku":        *row.Sku,
 			"name":       *row.Name,
 			"price_unit": *row.PriceUnit,
+			"stock":      stock,
 		}
 
 		rows = append(rows, newRow)
@@ -52,6 +60,21 @@ func ProductsPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	record.Insert(helpers.DatabaseInstance())
+
+	createdAt = time.Now().UTC().Format("2006-01-02 15:04:05")
+	stockAvailable := (*row.StockTotal - *row.StockCut)
+	stock := business.Stock{
+		ProductId:      record.Id,
+		StockTotal:     row.StockTotal,
+		StockCut:       row.StockCut,
+		StockAvailable: &stockAvailable,
+		CreatedAt:      &createdAt,
+	}
+
+	stock.Insert(helpers.DatabaseInstance())
+
+	record.LastStockId = stock.Id
+	record.Update(helpers.DatabaseInstance())
 
 	res := map[string]interface{}{
 		"id": *record.Id,
@@ -86,6 +109,8 @@ func ProductsPut(w http.ResponseWriter, r *http.Request) {
 	record.Name = row.Name
 	record.PriceUnit = row.PriceUnit
 	record.UpdatedAt = &updatedAt
+
+	record.Update(helpers.DatabaseInstance())
 
 	res := map[string]interface{}{
 		"id": *record.Id,

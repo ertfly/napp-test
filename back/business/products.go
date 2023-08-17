@@ -62,7 +62,9 @@ type Products struct {
 }
 
 func (row *Products) Insert(db *sql.DB) {
-	res, err := db.Exec("INSERT INTO products ( `sku`, `name`, `price_unit`, `last_stock_id`, `created_at`, `updated_at`, `trash` ) values (?, ?, ?, ?, ?, ?, ?)", row.Sku, row.Name, row.PriceUnit, row.LastStockId, row.CreatedAt, row.UpdatedAt, true)
+	trash := false
+	row.Trash = &trash
+	res, err := db.Exec("INSERT INTO products ( `sku`, `name`, `price_unit`, `last_stock_id`, `created_at`, `updated_at`, `trash` ) values (?, ?, ?, ?, ?, ?, ?)", row.Sku, row.Name, row.PriceUnit, row.LastStockId, row.CreatedAt, row.UpdatedAt, row.Trash)
 	if err != nil {
 		log.Fatalln(err.Error())
 		return
@@ -99,7 +101,7 @@ func (row Products) HasNew() bool {
 }
 
 func (row *Products) GetLastStock() *Stock {
-	if row.LastStockId == nil && row.LastStock == nil {
+	if row.LastStockId != nil && row.LastStock == nil {
 		lastStock, err := StockById(strconv.FormatInt(*row.LastStockId, 10))
 		if err != nil {
 			panic(err.Error())
