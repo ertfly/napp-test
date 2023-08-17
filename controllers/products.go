@@ -226,6 +226,21 @@ func ProductsValidate(w http.ResponseWriter, row ProductRequest) bool {
 		return false
 	}
 
+	if row.PriceUnit == nil {
+		helpers.ResponseError(w, 1, "price_unit is required")
+		return false
+	}
+
+	if row.PriceFinal == nil {
+		helpers.ResponseError(w, 1, "price_final is required")
+		return false
+	}
+
+	if *row.PriceUnit < *row.PriceFinal {
+		helpers.ResponseError(w, 1, "price_unit must be greater than price_final")
+		return false
+	}
+
 	return true
 }
 
