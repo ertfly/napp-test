@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "7a87d970-1aa8-44cb-8a8e-58de401c7938",
+		"name": "NappTest - Eric Teixeira",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "16790400"
+	},
+	"item": [
+		{
+			"name": "/products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/products"
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/products/1"
+			},
+			"response": []
+		},
+		{
+			"name": "/products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sku\": \"123\",\n    \"name\": \"Carderno capa dura\",\n    \"price_unit\": 15.4,\n    \"stock_total\": 10,\n    \"stock_cut\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/products"
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{id}",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sku\": \"122\",\n    \"name\": \"Carderno capa dura\",\n    \"price_unit\": 15.4,\n    \"stock_total\": 10,\n    \"stock_cut\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/products/1"
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{id}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "{{baseUrl}}/products/1"
+			},
+			"response": []
+		},
+		{
+			"name": "/stock/{productId}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/stock/1"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
